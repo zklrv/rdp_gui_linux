@@ -1,0 +1,71 @@
+import { Button, VerticalBox, Switch, Slider } from "std-widgets.slint";
+
+component TahoeButton inherits Rectangle {
+    in property <string> text;
+    in property <bool> active: false;
+    in property <bool> busy: false;
+    callback clicked;
+
+    width: 256px;
+    height: 44px;
+    background: busy ? #000000 : (active ? #28CD41 : #2A2A2A);
+    border-radius: 18px;
+    border-width: 1.5px;
+    border-color: busy ? #222222 : (active ? #32FF5B : #4D4D4D);
+
+    animate opacity { duration: 200ms; }
+    animate background { duration: 150ms; }
+
+    Text {
+        text: root.text;
+        color: active ? #2A2A2A : #FFFFFF;
+        font-size: 14px;
+    }
+
+    TouchArea {
+        mouse-cursor: pointer;
+        enabled: !busy;
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+export component MainWindow inherits Window {
+    in property <bool> vpn_connected: false;
+    in property <bool> rdp_active: false;
+    in property <bool> vpn_loading:false;
+    callback launch_vpn();
+    callback launch_rdp();
+
+    title: " ";
+    background: #0F0F0F;
+    default-font-family: "SF Compact Text";
+    min-width: 302px;
+    max-width: 302px;
+    min-height: 150px;
+    max-height: 150px;
+
+    VerticalLayout {
+        padding: 24px;
+        spacing: 16px;
+        alignment: start;
+
+        TahoeButton {
+            text: root.vpn_loading ? "Connecting..." : (root.vpn_connected ? "Connected" : "Connect OpenVPN");
+            active: vpn_connected;
+            clicked => {
+                root.launch_vpn();
+            }
+        }
+
+        TahoeButton {
+            text: rdp_active ? "RDP Running..." : "Launch FreeRDP";
+            busy: rdp_active;
+            opacity: root.rdp_active ? 0.5 : 1.0;
+            clicked => {
+                root.launch_rdp();
+            }
+        }
+    }
+}
