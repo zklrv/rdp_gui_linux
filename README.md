@@ -23,7 +23,7 @@ For CachyOS and other Arch-based distributions, you must modify your OpenVPN con
 
 Script Configuration
 
-In the same directory as your executable file, create a text file named config.txt. This file must contain exactly 4 lines:
+In the same directory as your executable file, create a text file named config. This file must contain exactly 4 lines:
 
     Server IP Address
 
